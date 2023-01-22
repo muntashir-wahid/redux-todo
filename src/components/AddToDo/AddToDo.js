@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toDoActions } from "./../../store/to-dos-slice";
 
 const AddToDo = () => {
   const dispatch = useDispatch();
+  const [formError, setFormError] = useState("");
 
   const createUinqueId = (task) => `${task.slice(1, 3)}${Date.now()}`;
 
@@ -13,7 +14,9 @@ const AddToDo = () => {
   const toDoSubmitHandler = (event) => {
     event.preventDefault();
     const form = event.target;
+    setFormError("");
 
+    // New Task
     const newTodo = {
       id: createUinqueId(form.task.value),
       task: form.task.value,
@@ -22,7 +25,7 @@ const AddToDo = () => {
 
     // Guard caluse for empty form submission
     if (!newTodo.task || !newTodo.description) {
-      console.log("Plese add a task and some description");
+      setFormError("Plese add a task and some description");
       return;
     }
 
@@ -34,7 +37,7 @@ const AddToDo = () => {
   return (
     <section className="max-w-lg mx-auto px-4 pt-12">
       <h2 className="text-center text-2xl font-semibold mb-6">
-        Add a new to do
+        Add a new task
       </h2>
       <form onSubmit={toDoSubmitHandler} className="space-y-4">
         <div className="w-full md:w-2/3 mx-auto">
@@ -42,6 +45,7 @@ const AddToDo = () => {
           <input
             name="task"
             type="text"
+            placeholder="add a new task"
             className="w-full border-2 border-black rounded-md p-2"
           />
         </div>
@@ -50,6 +54,7 @@ const AddToDo = () => {
           <textarea
             type="text"
             name="description"
+            placeholder="some description"
             className="w-full border-2 border-black rounded-md p-2"
           />
         </div>
@@ -61,6 +66,12 @@ const AddToDo = () => {
           />
         </div>
       </form>
+
+      {formError && (
+        <p className="px-2 mt-2 text-red-500 py-4 bg-slate-100 text-center rounded-md">
+          {formError}
+        </p>
+      )}
     </section>
   );
 };

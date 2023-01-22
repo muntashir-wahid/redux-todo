@@ -9,15 +9,19 @@ const UpdateToDo = ({ toDo, isUpdating }) => {
     event.preventDefault();
 
     const form = event.target;
+
+    // Updated task
     const updatedToDo = {
       id: toDo.id,
       task: form.task.value,
       description: form.description.value,
     };
 
+    // Guard clause for checking form
     if (!updatedToDo.task || !updatedToDo.description) {
       console.log("Plese input some task and descriptions");
       isUpdating(false);
+
       return;
     }
 

@@ -7,6 +7,7 @@ import UpdateToDo from "./components/UpdateToDo/UpdateToDo";
 import { toDoActions } from "./store/to-dos-slice";
 
 function App() {
+  // Hook calls
   const toDos = useSelector((state) => state);
   const dispatch = useDispatch();
   const [isToDoUpdating, setIsToDoUpdating] = useState(false);
@@ -17,6 +18,9 @@ function App() {
     setIsToDoUpdating(true);
   };
 
+  // ------------------------------------------------ //
+  // Fetch All ToDos from local storage after reload
+  // ------------------------------------------------ //
   useEffect(() => {
     const storedToDosStr = localStorage.getItem("to-do");
     const storedToDosArr = JSON.parse(storedToDosStr);
@@ -24,42 +28,12 @@ function App() {
     dispatch(toDoActions.replaceToDos(storedToDosArr));
   }, [dispatch]);
 
+  // ---------------------------------------- //
+  // Storing update ToDos into local storage
+  // --------------------------------------- //
   useEffect(() => {
     localStorage.setItem("to-do", JSON.stringify(toDos));
   }, [toDos]);
-
-  // const [toDos, setToDos] = useState([]);
-  // console.log(toDos);
-
-  // useEffect(() => {
-  //   const storedToDosStr = localStorage.getItem("to-do");
-  //   const sortedToDosArr = JSON.parse(storedToDosStr);
-  //   setToDos(sortedToDosArr);
-  // }, []);
-
-  // const addNewToDoHandler = (newTodo) => {
-  //   setToDos((preToDos) => {
-  //     const updatedToDos = [newTodo, ...preToDos];
-  //     return updatedToDos;
-  //   });
-
-  //   const hasToDo = localStorage.getItem("to-do");
-
-  //   if (!hasToDo) {
-  //     const toDo = [];
-  // toDo.push(newTodo);
-  //     localStorage.setItem("to-do", JSON.stringify(toDo));
-  //   }
-
-  //   if (hasToDo) {
-  //     const existingToDosStr = localStorage.getItem("to-do");
-  //     const existingToDosArr = JSON.parse(existingToDosStr);
-  //     console.log(existingToDosArr);
-  //     const updatedTodos = [newTodo, ...existingToDosArr];
-  //     const updatedToDosStr = JSON.stringify(updatedTodos);
-  //     localStorage.setItem("to-do", updatedToDosStr);
-  //   }
-  // };
 
   return (
     <main>
