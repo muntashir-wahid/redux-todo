@@ -1,34 +1,28 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { toDoActions } from "./../../store/to-dos-slice";
+import { toDoActions } from "../../store/to-dos-slice";
 
-const AddToDo = () => {
+const UpdateToDo = ({ toDo, isUpdating }) => {
   const dispatch = useDispatch();
 
-  const createUinqueId = (task) => `${task.slice(1, 3)}${Date.now()}`;
-
-  // ---------------------------------  //
-  // New To Do submit handler function
-  // ---------------------------------  //
-  const toDoSubmitHandler = (event) => {
+  const handleUpdate = (event) => {
     event.preventDefault();
-    const form = event.target;
 
-    const newTodo = {
-      id: createUinqueId(form.task.value),
+    const form = event.target;
+    const updatedToDo = {
+      id: toDo.id,
       task: form.task.value,
       description: form.description.value,
     };
 
-    // Guard caluse for empty form submission
-    if (!newTodo.task || !newTodo.description) {
-      console.log("Plese add a task and some description");
+    if (!updatedToDo.task || !updatedToDo.description) {
+      console.log("Plese input some task and descriptions");
+      isUpdating(false);
       return;
     }
 
-    // Dispatch new todo to the reducer
-    dispatch(toDoActions.addToDo(newTodo));
-    form.reset();
+    dispatch(toDoActions.updateToDo(updatedToDo));
+    isUpdating(false);
   };
 
   return (
@@ -36,10 +30,11 @@ const AddToDo = () => {
       <h2 className="text-center text-2xl font-semibold mb-6">
         Add a new to do
       </h2>
-      <form onSubmit={toDoSubmitHandler} className="space-y-4">
+      <form onSubmit={handleUpdate} className="space-y-4">
         <div className="w-full md:w-2/3 mx-auto">
           <label className="mb-1">Task Name:</label>
           <input
+            defaultValue={toDo.task}
             name="task"
             type="text"
             className="w-full border-2 border-black rounded-md p-2"
@@ -48,6 +43,7 @@ const AddToDo = () => {
         <div className="w-full md:w-2/3 mx-auto">
           <label className="mb-1">Task Description:</label>
           <textarea
+            defaultValue={toDo.description}
             type="text"
             name="description"
             className="w-full border-2 border-black rounded-md p-2"
@@ -56,7 +52,7 @@ const AddToDo = () => {
         <div className="w-full md:w-2/3 mx-auto">
           <input
             type="submit"
-            value="Add Task"
+            value="Edit task"
             className="bg-slate-400 px-6 py-2 rounded-md cursor-pointer"
           />
         </div>
@@ -65,4 +61,4 @@ const AddToDo = () => {
   );
 };
 
-export default AddToDo;
+export default UpdateToDo;

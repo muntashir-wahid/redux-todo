@@ -1,6 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { toDoActions } from "../../store/to-dos-slice";
 
-const ToDoItem = ({ toDoItem }) => {
+const ToDoItem = ({ toDoItem, onUpdateToDo }) => {
+  const dispatch = useDispatch();
+
+  const deleteToDoHandler = (id) => {
+    dispatch(toDoActions.deleteToDo(id));
+  };
+
   return (
     <li className="w-full p-6 rounded-md shadow-lg bg-slate-200 flex justify-between items-center">
       <div>
@@ -8,8 +16,18 @@ const ToDoItem = ({ toDoItem }) => {
         <p>{toDoItem.description}</p>
       </div>
       <div className="space-x-2">
-        <button className="bg-slate-400 p-2 rounded-md">Edit</button>
-        <button className="bg-slate-400 p-2 rounded-md">Delete</button>
+        <button
+          onClick={onUpdateToDo.bind(null, toDoItem)}
+          className="bg-slate-400 p-2 rounded-md"
+        >
+          Edit
+        </button>
+        <button
+          onClick={deleteToDoHandler.bind(null, toDoItem.id)}
+          className="bg-slate-400 p-2 rounded-md"
+        >
+          Delete
+        </button>
       </div>
     </li>
   );
