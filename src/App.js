@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AddToDo from "./components/AddToDo/AddToDo";
 import Header from "./components/Header/Header";
 import ToDos from "./components/ToDos/ToDos";
 import UpdateToDo from "./components/UpdateToDo/UpdateToDo";
+import { toDoActions } from "./store/to-dos-slice";
 
 function App() {
+  const toDos = useSelector((state) => state);
+  const dispatch = useDispatch();
   const [isToDoUpdating, setIsToDoUpdating] = useState(false);
   const [toBeUpdatedToDo, setToBeUpdatedToDo] = useState(null);
 
@@ -12,6 +16,17 @@ function App() {
     setToBeUpdatedToDo(toDo);
     setIsToDoUpdating(true);
   };
+
+  useEffect(() => {
+    const storedToDosStr = localStorage.getItem("to-do");
+    const storedToDosArr = JSON.parse(storedToDosStr);
+
+    dispatch(toDoActions.replaceToDos(storedToDosArr));
+  }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem("to-do", JSON.stringify(toDos));
+  }, [toDos]);
 
   // const [toDos, setToDos] = useState([]);
   // console.log(toDos);

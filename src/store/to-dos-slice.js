@@ -18,6 +18,10 @@ const toDosSclice = createSlice({
         }
       });
     },
+    replaceToDos(state, action) {
+      state = action.payload;
+      return state;
+    },
   },
 });
 
